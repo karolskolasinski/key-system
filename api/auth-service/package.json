@@ -1,0 +1,35 @@
+{
+  "name": "auth-service",
+  "version": "1.0.0",
+  "description": "Authentication microservice handling user registration, login, token management and authorization.",
+  "main": "index.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "docker compose up --build",
+    "dev": "nodemon src/index.ts",
+    "prod": "node dist/index.js",
+    "build": "tsc --build",
+    "debug": "node --inspect src/index.ts",
+    "test": "NODE_ENV=test jest --coverage"
+  },
+  "author": "Karol Skolasiński <karolskolasinski@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "body-parser": "^2.2.0",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "pg": "^8.14.1"
+  },
+  "devDependencies": {
+    "@types/body-parser": "^1.19.5",
+    "@types/express": "^5.0.1",
+    "@types/jsonwebtoken": "^9.0.9",
+    "@types/node": "^22.13.14",
+    "@types/pg": "^8.11.11",
+    "nodemon": "^3.1.9",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.2"
+  }
+}
