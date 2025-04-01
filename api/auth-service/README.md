@@ -17,7 +17,7 @@ All of the above dependencies must be installed on your local machine.
 1. Provide a `.env` file with the following variables:
 
 ```dotenv
-VERSION=
+MODE=
 
 EXPRESS_PORT=
 
@@ -32,7 +32,7 @@ PGADMIN_DEFAULT_EMAIL=
 PGADMIN_DEFAULT_PASSWORD=
 ```
 
-`VERSION` must be either `dev` or `prod`.
+`MODE` must be either `dev` or `prod`.
 
 2. Install dependencies:
 
@@ -46,4 +46,4 @@ npm i
 npm start
 ```
 
-4. Any code changes will automatically restart the server using `nodemon`.
+4. In `dev` mode any code changes will automatically restart the server using `nodemon`.
