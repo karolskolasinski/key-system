@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs";
 import dotenv from "dotenv";
 import pool from "./db";
 import createTable from "./initDb";
+import { getErrorMsg } from "./utils";
 
 dotenv.config();
 
@@ -17,11 +18,14 @@ app.post("/register", async (req: Request, res: Response) => {
   const hashedPassword = await bcrypt.hash(password, 10);
 
   try {
-    const query = "INSERT INTO users (email, password) VALUES ($1, $2) RETURNING *";
+    const query = "INSERT INTO users (email, password) VALUES ($1, $2) RETURNING id";
     const result = await pool.query(query, [email, hashedPassword]);
+
     res.status(201).json(result.rows[0]);
   } catch (err) {
-    res.status(400).json({ error: "User with this email already exists." });
+    const error = getErrorMsg(err);
+
+    res.status(400).json({ error });
   }
 });
 
@@ -31,9 +35,12 @@ app.get("/users/:id", async (req: Request, res: Response) => {
   try {
     const query = "SELECT id, email FROM users WHERE id = $1";
     const result = await pool.query(query, [id]);
+
     res.status(200).json(result.rows);
   } catch (err) {
-    res.status(500).json({ error: "An error occurred while processing your request." });
+    const error = getErrorMsg(err);
+
+    res.status(500).json({ error });
   }
 });
 
@@ -43,14 +50,17 @@ app.post("/login", async (req: Request, res: Response) => {
   try {
     const query = "SELECT * FROM users WHERE email = $1";
     const result = await pool.query(query, [email]);
+
     if (result.rows.length === 0) {
-      res.status(400).json({ error: "Invalid email or password." });
+      res.status(400).json({ error: "Invalid email or password" });
     }
     const user = result.rows[0];
+
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      res.status(400).json({ error: "Invalid email or password." });
+      res.status(400).json({ error: "Invalid email or password" });
     }
+
     res.status(200).json({ message: "Successfully logged in." });
   } catch (err) {
     res.status(500).json({ error: "An error occurred while processing your request." });

@@ -9,9 +9,9 @@ const createTable = async () => {
         password VARCHAR(255) NOT NULL
       );
     `);
-    console.info("table 'users' already exists");
+    console.info("Table 'users' already exists");
   } catch (error) {
-    console.error("creating table 'users' error", error);
+    console.error("Creating table 'users' error", error);
   }
 };
 
