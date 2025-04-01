@@ -5,6 +5,8 @@ import dotenv from "dotenv";
 import pool from "./db";
 import createTable from "./initDb";
 import { getErrorMsg } from "./utils";
+import jwt from "jsonwebtoken";
+import { User } from "./types";
 
 dotenv.config();
 
@@ -12,6 +14,8 @@ const app = express();
 app.use(bodyParser.json());
 
 createTable();
+
+const JWT_SECRET = process.env.JWT_SECRET;
 
 app.post("/register", async (req: Request, res: Response) => {
   const { email, password } = req.body;
@@ -46,11 +50,12 @@ app.get("/users/:id", async (req: Request, res: Response) => {
 
 app.post("/login", async (req: Request, res: Response) => {
   const { email, password } = req.body;
+  if (!JWT_SECRET) {
+    throw new Error("JWT_SECRET is not defined");
+  }
 
   try {
-    const query = "SELECT * FROM users WHERE email = $1";
-    const result = await pool.query(query, [email]);
-
+    const result = await pool.query<User>("SELECT * FROM users WHERE email = $1", [email]);
     if (result.rows.length === 0) {
       res.status(400).json({ error: "Invalid email or password" });
     }
@@ -61,7 +66,13 @@ app.post("/login", async (req: Request, res: Response) => {
       res.status(400).json({ error: "Invalid email or password" });
     }
 
-    res.status(200).json({ message: "Successfully logged in." });
+    const payload = { id: user.id, email: user.email };
+    const accessToken = jwt.sign(payload, JWT_SECRET, { expiresIn: "1h" });
+    const refreshToken = jwt.sign(payload, JWT_SECRET, { expiresIn: "7d" });
+
+    await pool.query("UPDATE users SET refresh_token = $1 WHERE id = $2", [refreshToken, user.id]);
+
+    res.status(200).json({ accessToken, refreshToken });
   } catch (err) {
     res.status(500).json({ error: "An error occurred while processing your request." });
   }
