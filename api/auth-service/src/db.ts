@@ -1,14 +1,18 @@
-import { Pool } from "pg";
-import dotenv from "dotenv";
+import mongoose from "mongoose";
 
-dotenv.config();
+const MONGODB_URI = process.env.MONGODB_URI;
 
-const pool = new Pool({
-  host: process.env.POSTGRES_HOST,
-  port: Number(process.env.POSTGRES_PORT),
-  user: process.env.POSTGRES_USER,
-  password: process.env.POSTGRES_PASSWORD,
-  database: process.env.POSTGRES_DATABASE,
-});
+export const connectDb = async () => {
+  if (!MONGODB_URI) {
+    console.error("MONGODB_URI is not defined");
+    process.exit(1);
+  }
 
-export default pool;
+  try {
+    await mongoose.connect(MONGODB_URI);
+    console.info("MongoDB connected successfully");
+  } catch (err) {
+    console.error("MongoDB connection error:", err);
+    process.exit(1);
+  }
+};
