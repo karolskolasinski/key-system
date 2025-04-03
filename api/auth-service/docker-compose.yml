@@ -29,6 +29,7 @@ services:
 
   auth-service:
     container_name: auth_service
+    image: auth-service:latest
     build:
       context: .
       dockerfile: ${MODE:-dev}.Dockerfile

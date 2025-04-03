@@ -1,0 +1,9 @@
+@import "tailwindcss";
+
+@tailwind utilities;
+
+@theme {
+    --font-sans: Ubuntu, sans-serif;
+    --font-sans-alt: Rajdhani, sans-serif;
+    --font-serif: Chonburi, serif;
+}

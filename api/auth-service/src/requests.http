@@ -20,3 +20,7 @@ Content-Type: application/json
   "password": "strongpassword123"
 }
 
+###
+
+POST http://localhost:3000/refresh
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZWQ2N2RlYjMwZTdkYzA0ODk2YzZjYSIsImVtYWlsIjoidGVzdEBleGFtcGxlLmNvbSIsImlhdCI6MTc0MzYxMzUyOCwiZXhwIjoxNzQ0MjE4MzI4fQ.wHB-IV7L6EUt_LxfmXZmZKEEJkWnvuMwgyGns-7Bu_U
